@@ -4,6 +4,9 @@ const Database = require("../src/services/DatabaseService");
 const CreateProfileScene = require("../src/services/scenes/createProfileScene");
 const FindProfileScene = require("../src/services/scenes/findProfileScene");
 const MatchScene = require("../src/services/scenes/matchScene");
+const {UserRepository} = require("./services/DatabaseRepository");
+const {startMenu, firstMenu} = require("./services/Menu");
+const DeleteProfileScene = require("./services/scenes/deleteProfileScene");
 
 const db = Database.getInstance(databaseConfig);
 
@@ -11,19 +14,27 @@ function mainBot2() {
     const createProfileWizard = new CreateProfileScene().createScene()
     const findProfileWizard = new FindProfileScene().createScene()
     const matchWizard = new MatchScene().createScene()
-    const stage = new Scenes.Stage([createProfileWizard, findProfileWizard, matchWizard] );
+    const deleteProfileWiard = new DeleteProfileScene().createScene()
+    const stage = new Scenes.Stage([createProfileWizard, findProfileWizard, matchWizard, deleteProfileWiard] );
     const bot = new Telegraf(botConfig.botToken);
+    const userRepository = new UserRepository()
     console.log()
     bot.use(session())
     bot.use(stage.middleware())
     bot.hears('Создать анкету', ctx => ctx.scene.enter('createProfileWizard'))
+    bot.hears('Пересоздать анкету', ctx => ctx.scene.enter('createProfileWizard'))
     bot.hears('Поиск', ctx => ctx.scene.enter('findProfileScene'))
     bot.hears('Взаимные симпатии', ctx => ctx.scene.enter('matchScene'))
+    bot.hears('Удалить анкету', ctx => ctx.scene.enter('deleteProfile'))
     bot.start(async (ctx) => {
         try {
-            await ctx.reply(":)", Markup.keyboard([
-                ['Создать анкету'],
-                ['Поиск', 'Взаимные симпатии']]).oneTime().resize())
+
+            if (await userRepository.findByTelegramId(ctx.from.id) !== null) {
+                await ctx.reply(":)", startMenu)
+            }
+            else {
+                await ctx.reply(firstMenu.oneTime().resize())
+            }
         }
         catch (e) {
             console.log(e)

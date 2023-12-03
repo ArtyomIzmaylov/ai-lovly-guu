@@ -14,7 +14,7 @@ const databaseConfig = {
 }
 
 const botConfig = {
-    botToken : process.env.BOT_TOKEN2
+    botToken : process.env.BOT_TOKEN
 }
 
 

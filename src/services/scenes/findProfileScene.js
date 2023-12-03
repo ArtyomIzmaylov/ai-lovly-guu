@@ -3,6 +3,7 @@ const Database = require("../DatabaseService");
 const {databaseConfig} = require("../../config");
 const {UserRepository, LikeRepository} = require("../DatabaseRepository");
 const {LikeManager} = require("../ManagerServices");
+const {startMenu} = require("../Menu");
 
 
 class FindProfileScene {
@@ -20,9 +21,6 @@ class FindProfileScene {
         const findMenu = Markup.keyboard([
             ['Лайк','Дизлайк'], ['Остановить поиск']
         ])
-        const startMenu = Markup.keyboard([
-            ['Создать анкету'],
-            ['Поиск', 'Взаимные симпатии']])
         start.on('text', async (ctx) =>{
             const currentUser = await userRepository.findByTelegramId(ctx.from.id)
             if (currentUser === null) {

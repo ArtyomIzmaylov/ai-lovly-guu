@@ -3,6 +3,7 @@ const {databaseConfig} = require("../../config");
 const {Composer, Markup, Scenes} = require("telegraf");
 const {UserRepository, LikeRepository} = require("../DatabaseRepository");
 const {LikeManager} = require("../ManagerServices");
+const {startMenu} = require("../Menu");
 
 
 class MatchScene {
@@ -15,9 +16,6 @@ class MatchScene {
         const likeRepository = new LikeRepository()
         const userRepository = new UserRepository()
         const likeManager = new LikeManager()
-        const startMenu = Markup.keyboard([
-            ['Создать анкету'],
-            ['Поиск', 'Взаимные симпатии']])
         const createMenu = Markup.keyboard([
             ['Перейти к следующей анкете'], ['Выйти']
         ])
@@ -31,19 +29,19 @@ class MatchScene {
                 }
                 console.log(user)
                 const formattedUserInfo = `
-║ *Ник:* @${user.username}
 ║ *Имя:* ${user.name}
-║ *Пол:* ${user.gender || 'не указан'}
-║ *Институт:* ${user.faculty || 'не указан'}
-║ *Курс:* ${user.course || 'не указан'}
-║ *Описание:* ${user.description || 'не указано'}
+║ *Возраст:* ${user.age}
+║ *Институт:* ${user.faculty}
+║ *Курс:* ${user.course}
+║ *Описание:* ${user.description}
 `;
-
+                console.log(user.photo)
                 try {
                     await ctx.replyWithPhoto(user.photo, {
                         caption: formattedUserInfo,
                         parse_mode: 'Markdown'
                     });
+                    await ctx.reply(`@${user.username}`)
                 }
                 catch (e) {
                     console.log(e)

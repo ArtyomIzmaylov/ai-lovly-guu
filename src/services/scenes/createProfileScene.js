@@ -1,6 +1,7 @@
 const {Composer, Markup, Scenes} = require("telegraf");
 const {UserManager} = require("../ManagerServices");
 const {UserRepository} = require("../DatabaseRepository");
+const {startMenu} = require("../Menu");
 
 class CreateProfileScene {
     createScene() {
@@ -14,10 +15,6 @@ class CreateProfileScene {
         const description = new Composer();
         const userManager = new UserManager();
         const userRepository = new UserRepository();
-        const startMenu = Markup.keyboard([
-            ['Создать анкету'],
-            ['Поиск', 'Взаимные симпатии']
-        ]).oneTime().resize();
 
         start.on('text', async (ctx) => {
             try {
@@ -159,9 +156,6 @@ class CreateProfileScene {
 ║ *Пол:* ${ctx.wizard.state.data.gender}
 ║ *Факультет:* ${ctx.wizard.state.data.faculty}
 ║ *Курс:* ${ctx.wizard.state.data.course}
-║ *Описание:* ${ctx.wizard.state.data.description}
-║ *Пол:* ${ctx.wizard.state.data.gender}
-║ *Факультет:* ${ctx.wizard.state.data.faculty}
 ║ *Курс:* ${ctx.wizard.state.data.course}
 ║ *Описание:* ${ctx.wizard.state.data.description}
 `;
@@ -170,7 +164,7 @@ class CreateProfileScene {
                     parse_mode: 'Markdown'
                 });
 
-                await ctx.reply('Супер! Анкета создана :)', startMenu)
+                await ctx.reply('Супер! Анкета создана :)', startMenu.oneTime().resize())
                 return ctx.scene.leave();
             } catch (e) {
                 console.log(e);
