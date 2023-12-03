@@ -13,6 +13,7 @@ function mainBot2() {
     const matchWizard = new MatchScene().createScene()
     const stage = new Scenes.Stage([createProfileWizard, findProfileWizard, matchWizard] );
     const bot = new Telegraf(botConfig.botToken);
+    console.log()
     bot.use(session())
     bot.use(stage.middleware())
     bot.hears('Создать анкету', ctx => ctx.scene.enter('createProfileWizard'))
