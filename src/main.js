@@ -7,6 +7,7 @@ const MatchScene = require("../src/services/scenes/matchScene");
 const {UserRepository} = require("./services/DatabaseRepository");
 const {startMenu, firstMenu} = require("./services/Menu");
 const DeleteProfileScene = require("./services/scenes/deleteProfileScene");
+const LikeScene = require("./services/scenes/likeScene");
 
 const db = Database.getInstance(databaseConfig);
 
@@ -15,10 +16,10 @@ function mainBot2() {
     const findProfileWizard = new FindProfileScene().createScene()
     const matchWizard = new MatchScene().createScene()
     const deleteProfileWiard = new DeleteProfileScene().createScene()
+    const likeWizard = new LikeScene().createScene()
     const stage = new Scenes.Stage([createProfileWizard, findProfileWizard, matchWizard, deleteProfileWiard] );
     const bot = new Telegraf(botConfig.botToken);
     const userRepository = new UserRepository()
-    console.log()
     bot.use(session())
     bot.use(stage.middleware())
     bot.hears('Создать анкету', ctx => ctx.scene.enter('createProfileWizard'))
@@ -29,8 +30,9 @@ function mainBot2() {
     bot.start(async (ctx) => {
         try {
 
+
             if (await userRepository.findByTelegramId(ctx.from.id) !== null) {
-                await ctx.reply(":)", startMenu)
+                await ctx.reply(":)", startMenu.oneTime().resize())
             }
             else {
                 await ctx.reply(firstMenu.oneTime().resize())
@@ -41,6 +43,7 @@ function mainBot2() {
         }
     })
     bot.launch()
+
 }
 
 mainBot2()

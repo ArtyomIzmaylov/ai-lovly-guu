@@ -3,7 +3,7 @@ const {databaseConfig} = require("../../config");
 const {Composer, Markup, Scenes} = require("telegraf");
 const {UserRepository, LikeRepository} = require("../DatabaseRepository");
 const {LikeManager} = require("../ManagerServices");
-const {startMenu} = require("../Menu");
+const {startMenu, matchMenu} = require("../Menu");
 
 
 class MatchScene {
@@ -16,9 +16,6 @@ class MatchScene {
         const likeRepository = new LikeRepository()
         const userRepository = new UserRepository()
         const likeManager = new LikeManager()
-        const createMenu = Markup.keyboard([
-            ['Перейти к следующей анкете'], ['Выйти']
-        ])
         start.on('text', async (ctx) =>{
             try {
                 const matchedUser = await userRepository.findByTelegramId(ctx.from.id)
@@ -47,7 +44,7 @@ class MatchScene {
                     console.log(e)
                 }
 
-                await ctx.reply(":)", createMenu.oneTime().resize())
+                await ctx.reply(":)", matchMenu.oneTime().resize())
                 return ctx.wizard.next()
             }
             catch (e) {

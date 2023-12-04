@@ -22,6 +22,23 @@ class LikeRepository {
     constructor() {
         this.db = Database.getInstance();
     }
+    async findLikeSender(id) {
+        //const result = await this.db.query(`SELECT * FROM "like" WHERE who_liked_user = $1 AND is_like = false LIMIT 1 OFFSET 0`, [id])
+        const result = await this.db.query(`SELECT *
+FROM "like"
+WHERE who_liked_user = $1
+  AND rate = true
+  AND NOT EXISTS (
+    SELECT 1
+    FROM "like" AS t2
+    WHERE t2.user_id = "like".who_liked_user
+      AND t2.who_liked_user = "like".user_id
+      AND t2.is_done = true
+      AND t2.is_like = true
+  );
+`, [id])
+        return result || null
+    }
 
     async findMatch(id) {
         const result = await this.db.query(`

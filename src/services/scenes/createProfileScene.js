@@ -156,7 +156,6 @@ class CreateProfileScene {
 ║ *Пол:* ${ctx.wizard.state.data.gender}
 ║ *Факультет:* ${ctx.wizard.state.data.faculty}
 ║ *Курс:* ${ctx.wizard.state.data.course}
-║ *Курс:* ${ctx.wizard.state.data.course}
 ║ *Описание:* ${ctx.wizard.state.data.description}
 `;
                 await ctx.replyWithPhoto(ctx.wizard.state.data.photo, {

@@ -31,7 +31,6 @@ class FindProfileScene {
             }
             const result = await likeRepository.findNoLike(currentUser.id, currentUser.gender, this.offset)
             const user = result[0]
-            console.log(user)
             if (user === undefined) {
                 await ctx.reply('Записи в БД закончились, новых анкет пока не создали...')
                 await ctx.reply('Но не переживай, скоро появятся :)', startMenu.oneTime().resize())
@@ -71,7 +70,11 @@ class FindProfileScene {
                 who_liked_user: ctx.wizard.state.data.who_liked_user,
                 rate : true,
                 is_done : false,
+                is_like : false
             })
+            const likeRecipient = await userRepository.find(ctx.wizard.state.data.who_liked_user)
+            console.log(likeRecipient, 'лайкер')
+            await ctx.telegram.sendMessage(likeRecipient.telegram_id, 'Тебя кто-то лайкнул :)')
             return ctx.scene.enter('findProfileScene')
         })
         choice.hears('Дизлайк', async (ctx) => {
@@ -79,7 +82,8 @@ class FindProfileScene {
                 user_id : ctx.wizard.state.data.user_id,
                 who_liked_user: ctx.wizard.state.data.who_liked_user,
                 rate : false,
-                is_done : false
+                is_done : false,
+                is_like : false
             })
             return ctx.scene.enter('findProfileScene')
         })

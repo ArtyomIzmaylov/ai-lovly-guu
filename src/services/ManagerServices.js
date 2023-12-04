@@ -54,8 +54,8 @@ class LikeManager {
     async create(likeData) {
         try {
             const result = await this.db.getDB().one(
-                'INSERT INTO "like" (user_id, who_liked_user, rate, is_done) VALUES($1, $2, $3, $4) RETURNING *',
-                [likeData.user_id, likeData.who_liked_user, likeData.rate, likeData.is_done]
+                'INSERT INTO "like" (user_id, who_liked_user, rate, is_done, is_like) VALUES($1, $2, $3, $4, $5) RETURNING *',
+                [likeData.user_id, likeData.who_liked_user, likeData.rate, likeData.is_done, likeData.is_like]
             );
             console.log('Like created:', result);
             return result;
@@ -77,9 +77,48 @@ class LikeManager {
             throw error;
         }
     }
-    async delete(id) {
+
+    async updateDone(user_id, who_liked_user) { //likeSender, currentUser
         try {
-            const result = await this.db.getDB().oneOrNone('DELETE FROM "like" WHERE id = $1 RETURNING *', [id]);
+            const result = await this.db.query( //user_id = 17, who_liked_user = 18
+                `UPDATE "like" SET is_done = true WHERE user_id = $1 AND who_liked_user = $2 RETURNING *`,
+                [user_id, who_liked_user]
+            );
+            return result;
+        } catch (error) {
+            console.error('Error updating like:', error);
+            throw error;
+        }
+    }
+    async updateLike(user_id, who_liked_user) { //current user, likeSEnder
+        try {
+            const result = await this.db.query( //user_id = 17, who_liked_user = 18
+                `UPDATE "like" SET is_like = true WHERE user_id = $1 AND who_liked_user = $2 RETURNING *`,
+                [user_id, who_liked_user]
+            );
+            return result;
+        } catch (error) {
+            console.error('Error updating like:', error);
+            throw error;
+        }
+    }
+
+
+    async deleteLike(user_id, who_liked_user) { //likeSender, currentUser
+        try {
+            const result = await this.db.query( //user_id = 17, who_liked_user = 18
+                `UPDATE "like" SET is_like = true WHERE user_id = $1 AND who_liked_user = $2 RETURNING *`,
+                [user_id, who_liked_user]
+            );
+            return result;
+        } catch (error) {
+            console.error('Error updating like:', error);
+            throw error;
+        }
+    }
+    async delete(user_id) {
+        try {
+            const result = await this.db.query('DELETE FROM "like" WHERE user_id = $1 RETURNING *', [user_id]);
             console.log('Like deleted:', result);
             return result;
         } catch (error) {
