@@ -29,13 +29,12 @@ function mainBot2() {
     bot.hears('Удалить анкету', ctx => ctx.scene.enter('deleteProfile'))
     bot.start(async (ctx) => {
         try {
-
-
-            if (await userRepository.findByTelegramId(ctx.from.id) !== null) {
+            const result = await userRepository.findByTelegramId(ctx.from.id)
+            if (result !== null) {
                 await ctx.reply(":)", startMenu.oneTime().resize())
             }
             else {
-                await ctx.reply(firstMenu.oneTime().resize())
+                await ctx.reply("Создай анкету :)", firstMenu.oneTime().resize())
             }
         }
         catch (e) {

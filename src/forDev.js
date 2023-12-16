@@ -14,15 +14,21 @@ function mainBot2() {
     const matchWizard = new MatchScene().createScene()
     const bot = new Telegraf(botConfig.botToken);
 
-    /*bot.on('message', async(ctx) => {
-        ctx.reply('Сейчас идут технические работы, пожалуйста, подождите немного, скоро все заработает :)')
-    })*/
 
     const userRepository = new UserRepository()
 
     const users1 = userRepository.findAll()
         .then(data => console.log(data.forEach(el => {
-            bot.telegram.sendMessage(el.telegram_id, 'ПРИВЕТ')
+            bot.telegram.sendMessage(el.telegram_id, `
+
+Привет! Провелись технические работы, список улучшений ниже:
+
+- Взаимные симпатии теперь работаю корректно
+- Когда тебя кто-то лайкает, приходит уведомление
+- Анкету теперь можно удалить
+            
+Удачи :)
+            `)
                 .then(sentMessage => {
                     console.log('Message sent successfully:', sentMessage);
                 })
@@ -30,7 +36,6 @@ function mainBot2() {
                     console.error('Error sending message:', error);
                 })
         })))
-
 
 
     bot.launch()
