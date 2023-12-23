@@ -1,10 +1,9 @@
-
 const {Scenes, Telegraf, session, Markup} = require("telegraf");
 const {botConfig, databaseConfig} = require("./config");
-const Database = require("./services/DatabaseService");
-const CreateProfileScene = require("./services/scenes/createProfileScene");
-const FindProfileScene = require("./services/scenes/findProfileScene");
-const MatchScene = require("./services/scenes/matchScene");
+const Database = require("../src/services/DatabaseService");
+const CreateProfileScene = require("../src/services/scenes/createProfileScene");
+const FindProfileScene = require("../src/services/scenes/findProfileScene");
+const MatchScene = require("../src/services/scenes/matchScene");
 const {UserRepository} = require("./services/DatabaseRepository");
 const {startMenu, firstMenu} = require("./services/Menu");
 const DeleteProfileScene = require("./services/scenes/deleteProfileScene");
@@ -28,10 +27,10 @@ function mainBot2() {
     bot.hears('Поиск', ctx => ctx.scene.enter('findProfileScene'))
     bot.hears('Взаимные симпатии', ctx => ctx.scene.enter('matchScene'))
     bot.hears('Удалить анкету', ctx => ctx.scene.enter('deleteProfile'))
-    bot.start(async (ctx) => {
+    bot.command("start", async (ctx) => {
         try {
-            const result = await userRepository.findByTelegramId(ctx.from.id)
-            if (result !== null) {
+            const result = userRepository.findByTelegramId(ctx.from.id)
+            if (await u== null) {
                 await ctx.reply(":)", startMenu.oneTime().resize())
             }
             else {

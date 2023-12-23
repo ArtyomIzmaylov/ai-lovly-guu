@@ -74,12 +74,6 @@ class FindProfileScene {
             })
             const likeRecipient = await userRepository.find(ctx.wizard.state.data.who_liked_user)
             console.log(likeRecipient, 'лайкер')
-            try {
-                await ctx.telegram.sendMessage(likeRecipient.telegram_id, 'Тебя кто-то лайкнул :)')
-            }
-            catch (e) {
-                console.log(e)
-            }
             return ctx.scene.enter('findProfileScene')
         })
         choice.hears('Дизлайк', async (ctx) => {

@@ -13,7 +13,7 @@ function mainBot2() {
     const findProfileWizard = new FindProfileScene().createScene()
     const matchWizard = new MatchScene().createScene()
     const bot = new Telegraf(botConfig.botToken);
-
+    
 
     const userRepository = new UserRepository()
 
@@ -42,3 +42,4 @@ function mainBot2() {
 }
 
 mainBot2()
+
