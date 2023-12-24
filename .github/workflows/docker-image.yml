@@ -11,14 +11,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-
       - name: Build ai-lovly-guu Docker image
         run: docker build . --file docker/dev/app/Dockerfile --tag {{vars.REGISTRY_URL}}/app-ai-lovly-guu:latest
   push-registry:
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker registry
-        run: docker login {{vars.REGISTRY_URL}} -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASSWORD}}
+        run: docker login $REGISTRY_URL -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASSWORD}}
 
       - name: Push to registry ai-lovly-guu Docker image
         run: docker push {{vars.REGISTRY_URL}}/app-ai-lovly-guu:latest
