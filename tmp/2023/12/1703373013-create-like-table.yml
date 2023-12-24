@@ -1,0 +1,45 @@
+databaseChangeLog:
+  - changeSet:
+      id: 2
+      author: your_name
+      changes:
+        - createTable:
+            tableName: like
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: user_id
+                  type: int
+              - column:
+                  name: who_liked_user
+                  type: int
+              - column:
+                  name: rate
+                  type: boolean
+              - column:
+                  name: is_done
+                  type: boolean
+              - column:
+                  name: is_like
+                  type: boolean
+
+        - addForeignKeyConstraint:
+            baseTableName: like
+            baseColumnNames: user_id
+            referencedTableName: user
+            referencedColumnNames: id
+            constraintName: like_user_id_fkey
+            onDelete: CASCADE
+
+        - addForeignKeyConstraint:
+            baseTableName: like
+            baseColumnNames: who_liked_user
+            referencedTableName: user
+            referencedColumnNames: id
+            constraintName: like_who_liked_user_fkey
+            onDelete: CASCADE

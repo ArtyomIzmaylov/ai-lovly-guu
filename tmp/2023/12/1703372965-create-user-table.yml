@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: your_name
+      changes:
+        - createTable:
+            tableName: user
+            columns:
+              - column:
+                  name: id
+                  type: int
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+              - column:
+                  name: name
+                  type: varchar(255)
+              - column:
+                  name: gender
+                  type: varchar(15)
+              - column:
+                  name: telegram_id
+                  type: bigint
+              - column:
+                  name: age
+                  type: int
+              - column:
+                  name: photo
+                  type: varchar(512)
+              - column:
+                  name: description
+                  type: varchar(512)
+              - column:
+                  name: username
+                  type: varchar(30)
+              - column:
+                  name: faculty
+                  type: varchar(15)
+              - column:
+                  name: course
+                  type: varchar
+              - column:
+                  name: is_like
+                  type: boolean
