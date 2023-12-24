@@ -5,19 +5,31 @@ on:
     branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+
 jobs:
+
   build:
+
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - name: Build ai-lovly-guu Docker image
-        run: docker build . --file docker/dev/app/Dockerfile --tag ${{vars.REGISTRY_URL}}/app-ai-lovly-guu:latest
+
+      - name: Build m1 Docker image
+        run: docker build . --file docker/dev/m1/Dockerfile --tag ${{ secrets.REGISTRY_URL }}/app-m1:latest
+
+      - name: Build m2 Docker image
+        run: docker build . --file docker/dev/m2/Dockerfile --tag ${{ secrets.REGISTRY_URL }}/app-m2:latest
+
   push-registry:
+    needs: build  # Зависит от успешного выполнения задачи build
     runs-on: ubuntu-latest
     steps:
       - name: Login to Docker registry
-        run: docker login ${{vars.REGISTRY_URL}} -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASSWORD}}
+        run: docker login ${{ secrets.REGISTRY_URL }} -u ${{ secrets.REGISTRY_USER }} -p ${{ secrets.REGISTRY_PASSWORD }}
 
-      - name: Push to registry ai-lovly-guu Docker image
-        run: docker push ${{vars.REGISTRY_URL}}/app-ai-lovly-guu:latest
+      - name: Push to registry m1 Docker image
+        run: docker push ${{ secrets.REGISTRY_URL }}/app-m1:latest
+
+      - name: Push to registry m2 Docker image
+        run: docker push ${{ secrets.REGISTRY_URL }}/app-m2:latest
