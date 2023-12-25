@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: postgres
+  template:
+    metadata:
+      labels:
+        app: postgres  # Изменяем метку на "postgres"
+    spec:
+      containers:
+        - name: your-app
+          image: registry.rangeray.ru:5000/app-ai-lovly-guu:latest
+          command: ["make", "migration-up"]
+          env:
+            - name: DATABASE_HOST
+              value: postgresql  # Используем "postgresql" в качестве хоста
+            - name: DATABASE_PORT
+              value: ${DB_PORT}
+            - name: DATABASE_NAME
+              value: ${DATABASE}
+            - name: DATABASE_USER
+              value: ${DB_USER}
+            - name: DATABASE_PASSWORD
+              value: ${DB_PASSWORD}

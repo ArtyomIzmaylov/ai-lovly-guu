@@ -26,25 +26,32 @@ secrets:
       --docker-password=${REGISTRY_PASSWORD}
 
 migration-up:
-	docker run --rm -v ./migration:/liquibase/changelog \
+	docker run --rm -v $$PWD/migration/changelog:/liquibase/changelog \
 	--network=${APP_NAME}-net \
-	liquibase/liquibase \
-	--changeLogFile=/liquibase/changelog \
+	liquibase/liquibase:4.25-alpine \
+	--changeLogFile=changelog-root.yml \
 	--url=${DATABASE_DSN} \
-	--username=${POSTGRES_USER} \
-	--password=${POSTGRES_PASSWORD} \
+	--username=${DB_USER} \
+	--password=${DB_PASSWORD} \
 	update
+migration-gen-table:
+	mkdir -p ./migration/changelog/`date +\%Y`/`date +\%m` && \
+	echo "databaseChangeLog:" > ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml && \
+	echo "  - changeSet:" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml && \
+	echo "      id: version-`date +\%s`" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml && \
+	echo "      author: your_name" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml && \
+	echo "      changes:" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml && \
+	echo "        - createTable:" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml && \
+	echo "            tableName: table-name" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "            columns:" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "            - column:" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "               name: id" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "               type: int" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "               autoIncrement: true" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "               constraints:" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "                 primaryKey: true" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
+	echo "            schemaName: schema-name" >> ./migration/changelog/`date +\%Y`/`date +\%m`/Version`date +\%s`.yml
 
-migration-help:
-	docker run \
-	--rm -v ./migration:/liquibase/changelog \
-	--network=${APP_NAME}-net \
-	liquibase/liquibase --help
-
-migration-init:
-	docker run -t\
-	-v ./migration/changelog:/liquibase/changelog \
-	-v ./migration:/liquibase \
-	liquibase/liquibase init project
-
+	echo "  - include:" >> ./migration/changelog/changelog-root.yml
+	echo "      file: /`date +\%Y`/`date +\%m`/Version`date +\%s`.yml" >> ./migration/changelog/changelog-root.yml
 
