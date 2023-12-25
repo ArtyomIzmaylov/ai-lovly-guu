@@ -28,6 +28,11 @@ services:
       - postgresql
     networks:
       - internal
+  migrations:
+    build:
+      context: .
+      dockerfile: ./docker/dev/migrations/Dockerfile
+
 networks:
   internal:
     name: ${APP_NAME}-net

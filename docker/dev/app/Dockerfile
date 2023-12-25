@@ -8,4 +8,5 @@ FROM base as relise
 WORKDIR /app
 COPY --from=base /app/dist/bundle.js /app/
 
+
 CMD ["node", "/app/bundle.js"]

@@ -15,8 +15,14 @@ jobs:
       - name: Build ai-lovly-guu Docker image
         run: docker build . --file docker/dev/app/Dockerfile --tag registry.rangeray.ru:5000/app-ai-lovly-guu:latest
 
+      - name: Build migrations Docker image
+        run: docker build . --file docker/dev/migrations/Dockerfile --tag registry.rangeray.ru:5000/app-migrations:latest
+
       - name: Login to Docker registry
         run: docker login registry.rangeray.ru:5000 -u ${{secrets.REGISTRY_USER}} -p ${{secrets.REGISTRY_PASSWORD}}
 
-      - name: Push to registry m1 Docker image
+      - name: Push to registry ai-lovly-guu Docker image
         run: docker push registry.rangeray.ru:5000/app-ai-lovly-guu:latest
+
+      - name: Push to registry migrations Docker image
+        run: docker push registry.rangeray.ru:5000/app-migrations:latest

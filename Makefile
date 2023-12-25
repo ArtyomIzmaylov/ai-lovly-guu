@@ -6,7 +6,7 @@ init:
 	cp -n .env.sample .env
 	npm install && npm run start::webpack
 up:
-	@docker compose up -d --remove-orphans
+	@docker compose up -d --remove-orphans --build --force-recreate
 
 down:
 	@docker compose down --remove-orphans
