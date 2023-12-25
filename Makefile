@@ -18,7 +18,8 @@ restart:
 	make down && make up
 
 deploy:
-	kubectl apply -f ./deployment/postgres.yaml
+	kubectl apply -f ./deployment/postgres-deployment.yaml
+	kubectl apply -f ./deployment/app-deployment.yaml
 secrets:
 	kubectl create secret docker-registry registry-secret \
       --docker-server=${REGISTRY_URL} \

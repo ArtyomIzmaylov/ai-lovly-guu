@@ -27,9 +27,12 @@ spec:
           volumeMounts:
             - name: postgresql-data
               mountPath: /var/lib/postgresql/data
+      imagePullSecrets:
+        - name: registry-secret
       volumes:
         - name: postgresql-data
           emptyDir: {}
+
 
 ---
 apiVersion: v1

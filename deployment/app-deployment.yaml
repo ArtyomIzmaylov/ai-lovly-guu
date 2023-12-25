@@ -27,3 +27,5 @@ spec:
               value: ${DB_USER}
             - name: DATABASE_PASSWORD
               value: ${DB_PASSWORD}
+      imagePullSecrets:
+        - name: registry-secret
